@@ -28,9 +28,12 @@ function updateUI() {
     state.forEach(row => {
         row.forEach(cellValue => {
             const tile = document.createElement('div');
-            tile.className = `field-cell field-cell--${cellValue}`;
+            
             if (cellValue !== 0) {
+                tile.className = `field-cell field-cell--${cellValue}`;
                 tile.textContent = cellValue;
+            } else {
+              tile.className = 'field-cell';
             }
             boardElement.appendChild(tile);
         });
@@ -40,19 +43,21 @@ function updateUI() {
     if (status === 'win') {
         statusElement.textContent = 'You Win!';
         statusElement.className = 'win';
-        statusElement.style.display = 'block';
+        statusElement.style.remove = 'hidden';
     } else if (status === 'lose') {
         statusElement.textContent = 'Game Over!';
         statusElement.className = 'lose';
-        statusElement.style.display = 'block';
+        statusElement.style.remove = 'hidden';
     } else {
-        statusElement.style.display = 'none';
+        statusElement.classList.add('hidden');
     }
 
     if (status === 'idle') {
         startButton.textContent = 'Start';
+        startButton.classList.remove('restart');
     } else {
         startButton.textContent = 'Restart';
+        startButton.classList.add('restart');
     }
 }
 
@@ -62,6 +67,10 @@ function updateUI() {
  */
 function handleKeydown(event) {
     if (game.getStatus() !== 'playing') return;
+    event.preventDefault();
+
+    let moveMade = false;
+    const previousState = JSON.stringify(game.getState());
 
     switch (event.key) {
         case 'ArrowUp':
@@ -76,8 +85,14 @@ function handleKeydown(event) {
         case 'ArrowRight':
             game.moveRight();
             break;
+        default:
+            return; // Ignore other keys
     }
-    updateUI();
+
+    const currentState = JSON.stringify(game.getState());
+    if (previousState !== currentState) {
+        updateUI();
+    }
 }
 
 /**
@@ -93,6 +108,7 @@ function handleGesture() {
 
     const dx = touchendX - touchstartX;
     const dy = touchendY - touchstartY;
+    const previousState = JSON.stringify(game.getState());
 
     if (Math.abs(dx) > Math.abs(dy)) { // Horizontal swipe
         if (dx > 0) {
@@ -107,7 +123,10 @@ function handleGesture() {
             game.moveUp();
         }
     }
-    updateUI();
+   const currentState = JSON.stringify(game.getState());
+    if (previousState !== currentState) {
+        updateUI();
+    }
 }
 
 // Event Listeners

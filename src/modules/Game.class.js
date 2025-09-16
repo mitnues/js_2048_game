@@ -62,7 +62,7 @@
     this.#state = JSON.parse(JSON.stringify(this.#initialState));
     this.#score = 0;
     this.#status = 'idle'; // 'idle' | 'playing' | 'win' | 'lose'
-    console.log(initialState);
+    
   }
 
   // moveLeft() {}
@@ -206,8 +206,6 @@
     }
   }
 
-   #checkWinOrLose() { /* ... implementation to be added later ... */ }
-
   /**
    * Slides and merges a single line (row or column).
    *
@@ -244,13 +242,13 @@
    * @private
    * @param {string} originalState The JSON string of the board before the move.
    */
-  #checkAndUpdate(originalState) {
-    const newState = JSON.stringify(this.#state);
-    if (originalState !== newState) {
-      this.#addNewTile();
-      this.#checkWinOrLose();
-    }
-  }
+  // #checkAndUpdate(originalState) {
+  //   const newState = JSON.stringify(this.#state);
+  //   if (originalState !== newState) {
+  //     this.#addNewTile();
+  //     this.#checkWinOrLose();
+  //   }
+  // }
 
   moveLeft() {
     if (this.#status !== 'playing') return;
@@ -268,10 +266,12 @@
     const originalState = JSON.stringify(this.#state);
     
     for (let i = 0; i < this.#size; i++) {
-      const reversedRow = this.#state[i].reverse();
+      const reversedRow = [...this.#state[i]].reverse();
       const newRow = this.#slideAndCombine(reversedRow).reverse();
       this.#state[i] = newRow;
     }
+
+    //const reversedRow = [...this.#state[i]].reverse()
     
     this.#checkAndUpdate(originalState);
   }

@@ -62,7 +62,7 @@
     this.#state = JSON.parse(JSON.stringify(this.#initialState));
     this.#score = 0;
     this.#status = 'idle'; // 'idle' | 'playing' | 'win' | 'lose'
-    
+
   }
 
   // moveLeft() {}
@@ -242,13 +242,7 @@
    * @private
    * @param {string} originalState The JSON string of the board before the move.
    */
-  // #checkAndUpdate(originalState) {
-  //   const newState = JSON.stringify(this.#state);
-  //   if (originalState !== newState) {
-  //     this.#addNewTile();
-  //     this.#checkWinOrLose();
-  //   }
-  // }
+
 
   moveLeft() {
     if (this.#status !== 'playing') return;
